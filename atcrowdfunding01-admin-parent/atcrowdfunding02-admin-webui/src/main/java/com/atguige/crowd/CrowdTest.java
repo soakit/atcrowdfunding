@@ -3,9 +3,12 @@ package com.atguige.crowd;
 import com.atguigu.crowd.entity.Admin;
 import com.atguigu.crowd.mapper.AdminMapper;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -23,7 +26,7 @@ public class CrowdTest {
     @Test
     public void testInsertAdmin() {
         Admin admin;
-        admin = new Admin(null, "Rachel", "123123", "rui", "rui@qq.com", null);
+        admin = new Admin(1511, "Rachel", "123123", "rui", "rui@qq.com", null);
         int count = adminMapper.insert(admin);
         System.out.println(count);
     }
@@ -32,6 +35,27 @@ public class CrowdTest {
     public void testConnection() throws SQLException {
         Connection conn = dataSource.getConnection();
         System.out.println(conn);
+    }
+
+    @Test
+    public void testLog() {
+
+        // 1. 获取Logger对象，通常传入当前打印日志的类
+        Logger logger = LoggerFactory.getLogger(CrowdTest.class);
+
+        // 2. 根据不同日志级别打印日志
+        logger.debug("Hello I am DEBUG");
+
+        logger.error("Hello I am ERROR");
+
+        logger.info("Hello I am INFO");
+
+        logger.warn("Hello I am WARN");
+
+        // 按照 Debug 级别打印日志
+        Admin admin = adminMapper.selectByPrimaryKey(1511);
+        logger.debug(admin.toString());
+
     }
 
 }
