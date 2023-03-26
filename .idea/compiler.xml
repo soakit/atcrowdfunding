@@ -20,6 +20,7 @@
       <module name="atcrowdfunding04-admin-entity" target="1.8" />
       <module name="atcrowdfunding05-common-util" target="1.5" />
       <module name="atcrowdfunding06-common-reverse" target="1.5" />
+      <module name="extra01-ajax" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
