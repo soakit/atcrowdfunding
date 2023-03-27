@@ -9,6 +9,7 @@
 
     <!--配置springmvc注解驱动-->
     <mvc:annotation-driven/>
+    <mvc:resources mapping="/js/**" location="/js/"/>
 
     <!--配置视图解析器-->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
