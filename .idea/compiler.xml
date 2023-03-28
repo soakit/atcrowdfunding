@@ -20,7 +20,17 @@
       <module name="atcrowdfunding04-admin-entity" target="1.8" />
       <module name="atcrowdfunding05-common-util" target="1.5" />
       <module name="atcrowdfunding06-common-reverse" target="1.5" />
-      <module name="extra01-ajax" target="1.5" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-encoding utf-8" />
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="atcrowdfunding01-admin-parent" options="" />
+      <module name="atcrowdfunding02-admin-webui" options="" />
+      <module name="atcrowdfunding03-admin-component" options="" />
+      <module name="atcrowdfunding04-admin-entity" options="" />
+      <module name="atcrowdfunding05-common-util" options="" />
+      <module name="atcrowdfunding06-common-reverse" options="" />
+    </option>
   </component>
 </project>

@@ -10,11 +10,23 @@
     <!--配置springmvc注解驱动-->
     <mvc:annotation-driven/>
     <mvc:resources mapping="/js/**" location="/js/"/>
+    <mvc:view-controller path="/login.html" view-name="login" />
 
     <!--配置视图解析器-->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/"/>
         <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--配置基于xml的异常映射-->
+    <bean id="simpleMappingExceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <!-- 配置异常类型和具体视图页面对应关系 -->
+        <property name="exceptionMappings">
+            <props>
+                <!-- key属性指定异常全类名，标签体中指定对应的视图(前后缀拼接) -->
+                <prop key="java.lang.Exception">system-error</prop>
+            </props>
+        </property>
     </bean>
 
 </beans>

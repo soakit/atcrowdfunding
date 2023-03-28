@@ -23,6 +23,7 @@
           <element id="archive" name="atcrowdfunding05-common-util-1.0-SNAPSHOT.jar">
             <element id="module-output" name="atcrowdfunding05-common-util" />
           </element>
+          <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
           <element id="library" level="project" name="Maven: org.springframework:spring-orm:5.2.11.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.2.11.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:5.2.11.RELEASE" />
@@ -43,7 +44,6 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.11.3" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.11.3" />
           <element id="library" level="project" name="Maven: javax.servlet.jsp.jstl:jstl-api:1.2" />
-          <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
           <element id="library" level="project" name="Maven: javax.servlet.jsp:jsp-api:2.1" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.6" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.7" />

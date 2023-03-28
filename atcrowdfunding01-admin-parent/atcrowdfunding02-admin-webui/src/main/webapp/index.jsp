@@ -122,11 +122,14 @@
 --%>
 <a href="test/ssm.html">测试SSM整合环境</a>
 
-<br/>
+<div>
+    <button id="btn01">发送数组-方式1</button>
+    <button id="btn02">发送数组-方式2</button>
+    <button id="btn03">发送对象</button>
+    <button id="btn04">发送对象2</button>
+</div>
 
-<button id="btn01">发送数组-方式1</button>
-<button id="btn02">发送数组-方式2</button>
-<button id="btn03">发送对象</button>
-<button id="btn04">发送对象2</button>
+<a href="test/err.html">测试出错</a>
+
 </body>
 </Html>
