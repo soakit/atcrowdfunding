@@ -12,7 +12,7 @@
     <meta charset="utf-8">
     <title>home</title>
     <base href="<%=basePath%>">
-    <script type="text/javascript" src="js/jquery/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="jquery/jquery-2.1.1.min.js"></script>
     <script type="text/javascript">
         $(function () {
             $("#btn01").click(function () {

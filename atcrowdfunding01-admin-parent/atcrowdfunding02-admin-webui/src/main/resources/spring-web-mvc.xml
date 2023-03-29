@@ -9,8 +9,6 @@
 
     <!--配置springmvc注解驱动-->
     <mvc:annotation-driven/>
-    <mvc:resources mapping="/js/**" location="/js/"/>
-    <mvc:view-controller path="/login.html" view-name="login" />
 
     <!--配置视图解析器-->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -18,8 +16,16 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+    <!-- 静态文件加载 -->
+    <!-- 使用 <mvc:default-servlet-handler/>或 mvc:resources标签 -->
+    <mvc:default-servlet-handler/>
+
+    <!--配置view-controller，直接把请求地址和视图名称关联起来，从而无需写handler方法-->
+    <mvc:view-controller path="/admin/to/login.do" view-name="admin-login"/>
+
     <!--配置基于xml的异常映射-->
-    <bean id="simpleMappingExceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+    <bean id="simpleMappingExceptionResolver"
+          class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <!-- 配置异常类型和具体视图页面对应关系 -->
         <property name="exceptionMappings">
             <props>
