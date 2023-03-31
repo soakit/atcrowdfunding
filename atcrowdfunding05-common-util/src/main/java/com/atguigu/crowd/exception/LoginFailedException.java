@@ -1,4 +1,4 @@
-package com.atguigu.crowd.util;
+package com.atguigu.crowd.exception;
 
 public class LoginFailedException extends RuntimeException{
     private static final long serialVersionUID = 1L;

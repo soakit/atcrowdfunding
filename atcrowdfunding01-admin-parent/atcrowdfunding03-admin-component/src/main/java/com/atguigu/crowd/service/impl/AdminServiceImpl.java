@@ -6,7 +6,7 @@ import com.atguigu.crowd.entity.AdminExample;
 import com.atguigu.crowd.mapper.AdminMapper;
 import com.atguigu.crowd.service.api.AdminService;
 import com.atguigu.crowd.util.CrowdUtil;
-import com.atguigu.crowd.util.LoginFailedException;
+import com.atguigu.crowd.exception.LoginFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
