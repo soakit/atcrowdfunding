@@ -2,6 +2,7 @@ package com.atguigu.crowd.mvc.config;
 
 import com.atguigu.crowd.constant.CrowdConstant;
 import com.atguigu.crowd.util.CrowdUtil;
+import com.atguigu.crowd.util.LoginFailedException;
 import com.atguigu.crowd.util.ResultEntity;
 import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,12 +20,18 @@ public class CrowdExceptionResolver {
     @ExceptionHandler(value = NullPointerException.class)
     public ModelAndView resolveNullPointerException(NullPointerException exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        String viewName =  "system-error";
-        return commonResolve(viewName,exception,request,response);
+        String viewName = "system-error";
+        return commonResolve(viewName, exception, request, response);
+    }
+
+    @ExceptionHandler(value = LoginFailedException.class)
+    public ModelAndView resolveLoginFailedException(NullPointerException exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String viewName = "admin-login";
+        return commonResolve(viewName, exception, request, response);
     }
 
     // 创建通用方法
-    private ModelAndView commonResolve(String viewName, Exception exception, HttpServletRequest request, HttpServletResponse response ) throws IOException {
+    private ModelAndView commonResolve(String viewName, Exception exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 1. 判断当前请求类型
         boolean judgeResult = CrowdUtil.judgeRequestType(request);
         // 2. 如果为Ajax请求

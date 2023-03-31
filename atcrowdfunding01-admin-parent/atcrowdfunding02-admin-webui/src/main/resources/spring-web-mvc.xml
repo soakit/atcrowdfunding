@@ -22,6 +22,7 @@
 
     <!--配置view-controller，直接把请求地址和视图名称关联起来，从而无需写handler方法-->
     <mvc:view-controller path="/admin/to/login.do" view-name="admin-login"/>
+    <mvc:view-controller path="/admin/to/main.do" view-name="admin-main"/>
 
     <!--配置基于xml的异常映射-->
     <bean id="simpleMappingExceptionResolver"

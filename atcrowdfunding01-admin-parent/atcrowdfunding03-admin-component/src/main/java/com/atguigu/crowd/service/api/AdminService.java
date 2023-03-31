@@ -7,5 +7,8 @@ import java.util.List;
 public interface AdminService {
     void saveAdmin(Admin admin);
 
+    Admin getAdminByLoginAcct(String loginAcct, String userPswd);
+
     List<Admin> getAll();
+
 }
