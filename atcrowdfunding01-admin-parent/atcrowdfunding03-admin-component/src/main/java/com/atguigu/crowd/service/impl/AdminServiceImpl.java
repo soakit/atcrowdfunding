@@ -3,13 +3,22 @@ package com.atguigu.crowd.service.impl;
 import com.atguigu.crowd.constant.CrowdConstant;
 import com.atguigu.crowd.entity.Admin;
 import com.atguigu.crowd.entity.AdminExample;
+import com.atguigu.crowd.exception.LoginAcctAlreadyInUseException;
+import com.atguigu.crowd.exception.LoginAcctAlreadyInUseForUpdateException;
 import com.atguigu.crowd.mapper.AdminMapper;
 import com.atguigu.crowd.service.api.AdminService;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.exception.LoginFailedException;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,9 +28,23 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
+
     @Override
     public void saveAdmin(Admin admin) {
-        adminMapper.insert(admin);
+        // 密码加密
+        admin.setUserPswd(CrowdUtil.md5(admin.getUserPswd()));
+        // 创建时间
+        admin.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        // 用户名已存在错误：
+        try {
+            adminMapper.insert(admin);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (e instanceof DuplicateKeyException) {
+                throw new LoginAcctAlreadyInUseException(CrowdConstant.MESSAGE_LOGIN_ACCT_ALREADY_IN_USE);
+            }
+        }
     }
 
     @Override
@@ -64,8 +87,48 @@ public class AdminServiceImpl implements AdminService {
         return admin;
     }
 
+
     @Override
     public List<Admin> getAll() {
         return adminMapper.selectByExample(new AdminExample());
+    }
+
+    @Override
+    public PageInfo<Admin> getPageInfo(String keyword, Integer pageNum, Integer pageSize) {
+        // 1.开启分页功能
+        PageHelper.startPage(pageNum, pageSize);
+        // 2.查询 Admin 数据
+        List<Admin> adminList = adminMapper.selectAdminListByKeyword(keyword);
+        // ※辅助代码：打印 adminList 的全类名
+        Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
+        logger.debug("adminList 的全类名是：" + adminList.getClass().getName());
+        // 3.为了方便页面使用将 adminList 封装为 PageInfo
+        PageInfo<Admin> pageInfo = new PageInfo<>(adminList);
+        return pageInfo;
+    }
+
+    @Override
+    public void remove(Integer adminId) {
+        adminMapper.deleteByPrimaryKey(adminId);
+    }
+
+    @Override
+    public void update(Admin admin) {
+        // 有选择的更新，对于null值字段不更新
+        try {
+            adminMapper.updateByPrimaryKeySelective(admin);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 用户名重复：
+            logger.info("异常全类名" + e.getClass().getName());
+            if (e instanceof DuplicateKeyException) {
+                throw new LoginAcctAlreadyInUseForUpdateException(CrowdConstant.MESSAGE_LOGIN_ACCT_ALREADY_IN_USE);
+            }
+        }
+    }
+
+    @Override
+    public Admin getAdminById(Integer adminId) {
+        return adminMapper.selectByPrimaryKey(adminId);
     }
 }

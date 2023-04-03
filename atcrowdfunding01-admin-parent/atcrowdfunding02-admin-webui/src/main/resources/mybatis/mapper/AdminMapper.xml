@@ -225,4 +225,15 @@
       create_time = #{createTime,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectAdminListByKeyword" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from t_admin
+      where login like CONCAT("%",#{keyword},"%")
+      or
+      user_name like CONCAT("%",#{keyword},"%")
+      or
+      email like CONCAT("%",#{keyword},"%")
+  </select>
 </mapper>

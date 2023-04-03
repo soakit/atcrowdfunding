@@ -2,6 +2,7 @@ package com.atguigu.crowd.mvc.config;
 
 import com.atguigu.crowd.constant.CrowdConstant;
 import com.atguigu.crowd.exception.AccessForbiddenException;
+import com.atguigu.crowd.exception.LoginAcctAlreadyInUseException;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.exception.LoginFailedException;
 import com.atguigu.crowd.util.ResultEntity;
@@ -37,6 +38,15 @@ public class CrowdExceptionResolver {
                                                         HttpServletRequest request,
                                                         HttpServletResponse response) throws IOException {
         String viewName = "admin-login";
+        return commonResolve(viewName, exception, request, response);
+    }
+
+    // 用户名重复异常
+    @ExceptionHandler(value = LoginAcctAlreadyInUseException.class)
+    public ModelAndView resolveLoginAcctAlreadyInUseException(LoginAcctAlreadyInUseException exception,
+                                                              HttpServletRequest request,
+                                                              HttpServletResponse response) throws IOException {
+        String viewName = "admin-add";
         return commonResolve(viewName, exception, request, response);
     }
 
