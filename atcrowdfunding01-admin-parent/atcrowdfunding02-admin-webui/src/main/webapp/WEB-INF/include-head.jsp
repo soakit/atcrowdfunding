@@ -19,24 +19,27 @@
     <style>
         .tree li {
             list-style-type: none;
-            cursor:pointer;
+            cursor: pointer;
         }
+
         .tree-closed {
-            height : 40px;
+            height: 40px;
         }
+
         .tree-expanded {
-            height : auto;
+            height: auto;
         }
     </style>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="script/docs.min.js"></script>
+    <script type="text/javascript" src="layer/layer.js"></script>
     <script type="text/javascript">
         $(function () {
-            $(".list-group-item").click(function(){
-                if ( $(this).find("ul") ) {
+            $(".list-group-item").click(function () {
+                if ($(this).find("ul")) {
                     $(this).toggleClass("tree-closed");
-                    if ( $(this).hasClass("tree-closed") ) {
+                    if ($(this).hasClass("tree-closed")) {
                         $("ul", this).hide("fast");
                     } else {
                         $("ul", this).show("fast");

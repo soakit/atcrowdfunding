@@ -61,12 +61,13 @@ function fillTableBody(pageInfo) {
         var roleName = role.name;
 
         var numberTd = "<td>" + (i + 1) + "</td>";
-        var checkboxTd = "<td><input type='checkbox'></td>";
+        var checkboxTd = "<td><input class='itemBox' id='" + roleId + "' type='checkbox'></td>";
         var roleNameTd = "<td>" + roleName + "</td>";
 
-        var checkBtn = "<button type=\"button\" class=\"btn btn-success btn-xs\"><i class=\" glyphicon glyphicon-check\"></i></button>";
-        var pencilBtn = "<button type=\"button\" class=\"btn btn-primary btn-xs\"><i class=\" glyphicon glyphicon-pencil\"></i></button>";
-        var removeBtn = "<button type=\"button\" class=\"btn btn-danger btn-xs\"><i class=\" glyphicon glyphicon-remove\"></i></button>";
+        // var checkBtn = "<button type=\"button\" class=\"btn btn-success btn-xs\"><i class=\" glyphicon glyphicon-check\"></i></button>";
+        var checkBtn = "";
+        var pencilBtn = "<button id='" + roleId + "'type='button' class='btn btn-primary btn-xs pencilBtn'><i class='glyphicon glyphicon-pencil'></i></button>";
+        var removeBtn = "<button id='" + roleId + "' type=\"button\" class=\"btn btn-danger btn-xs removeBtn\"><i class=\" glyphicon glyphicon-remove\"></i></button>";
 
         var buttonTd = "<td>" + checkBtn + " " + pencilBtn + " " + removeBtn + "</td>"
         var tr = "<tr>" + numberTd + checkboxTd + roleNameTd + buttonTd + "</tr>";
@@ -110,4 +111,29 @@ function paginationCallBack(pageIndex, jQuery) {
 
     // 由于每一个页码按钮都是超链接，所以在这个函数最后取消超链接的默认行为
     return false;
+}
+
+// 声明专门的函数，显示确认模态框
+function showConfirmModal(roleArray) {
+
+    console.log(roleArray);
+    // 打开模态框
+    $("#confirmModal").modal("show");
+
+    // 清除旧数据
+    $("#roleNameDiv").empty();
+
+    // 全局变量，存放角色id
+    window.roleIdArray = [];
+
+    // 遍历roleArray数组
+    for (let i = 0; i < roleArray.length; i++) {
+        var role = roleArray[i];
+        var roleName = role.roleName;
+        $("#roleNameDiv").append(roleName + "<br/>");
+
+        var roleId = role.roleId;
+
+        window.roleIdArray.push(roleId);
+    }
 }

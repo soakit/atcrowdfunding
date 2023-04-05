@@ -20,6 +20,200 @@
             window.keyword = $("#keywordInput").val();
             generatePage();
         });
+
+        // 4. 点击新增打开模态框
+        $("#showAddModalBtn").click(function () {
+            $("#addModal").modal("show");
+        });
+        // 5.模态框数据保存
+        $("#saveRoleBtn").click(function () {
+            // 1.获取用户在模态框中输入的角色名，trim去前后空格
+            var roleName = $.trim($("#addModal [name=roleName]").val());
+
+            console.log("打印：roleName" + roleName);
+            // 发送ajax请求
+            $.ajax({
+                url: "role/save.do",
+                type: "post",
+                data: {
+                    roleName: roleName
+                },
+                dataType: "json",
+                success: function (resp) {
+                    let result = resp.result;
+                    if (result === "SUCCESS") {
+                        layer.msg("已保存");
+
+                        // 重新加载分页
+                        window.pageNum = 99999999;
+                        generatePage();
+                    }
+                    if (result === "FAILED") {
+                        layer.msg("操作失败！" + resp.message);
+                    }
+                },
+                error: function (resp) {
+                    layer.msg(resp.status + "" + resp.statusText);
+                }
+            });
+
+            // 关闭模态框
+            $("#addModal").modal("hide");
+
+            // 清理模态框内容
+            $("#addModal [name=roleName]").val("");
+
+        });
+
+        // 6. 更新
+        $("#rolePageBody").on("click", ".pencilBtn", function () {
+            // 打开模态框
+            $("#editModal").modal("show");
+
+            // 获取表格中当前行中的角色名称
+            var roleName = $(this).parent().prev().text();
+
+            // 获取当前角色id
+            window.roleId = this.id;
+            console.log("roleId:" + window.roleId)
+            // 使用roleName的值设置模态框中的文本框
+            $("#editModal [name=roleName]").val(roleName);
+        });
+
+        // 7.给更新模态框中的更新按钮绑定单机响应函数
+        $("#updateRoleBtn").click(function () {
+            // 从文本框中获取新的角色名称
+            var roleName = $("#editModal [name=roleName]").val();
+
+            // 发送ajax请求执行更新
+            $.ajax({
+                url: "role/update.do",
+                type: "post",
+                data: {
+                    id: window.roleId,
+                    name: roleName
+                },
+                dataType: "json",
+                success: function (resp) {
+                    let result = resp.result;
+                    if (result === "SUCCESS") {
+                        layer.msg("更新成功！");
+
+                        // 重新加载分页
+                        generatePage();
+                    }
+                    if (result === "FAILED") {
+                        layer.msg("操作失败！" + resp.message);
+                    }
+                },
+                error: function (resp) {
+                    layer.msg(resp.status + "" + resp.statusText);
+                }
+            });
+            // 关闭模态框
+            $("#editModal").modal("hide");
+        });
+
+        // 8. 点击确认模态框中的确认删除按钮执行删除
+        $("#removeRoleBtn").click(function () {
+
+            let requestBody = JSON.stringify(window.roleIdArray);
+            $.ajax({
+                url: "role/remove/by/role/id/array.do",
+                type: "post",
+                data: requestBody,
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (resp) {
+                    let result = resp.result;
+                    if (result === "SUCCESS") {
+                        layer.msg("删除成功！");
+
+                        // 重新加载分页
+                        generatePage();
+                    }
+                    if (result === "FAILED") {
+                        layer.msg("操作失败！" + resp.message);
+                    }
+                },
+                error: function (resp) {
+                    layer.msg(resp.status + "" + resp.statusText);
+                }
+            });
+            // 关闭模态框
+            $("#confirmModal").modal("hide");
+        });
+
+        // 9. 单条删除
+        $("#rolePageBody").on("click", ".removeBtn", function () {
+
+            // 从当前按钮出发获取角色名称
+            let roleName = $(this).parent().prev().text();
+
+            // 创建role对象存入数组
+            var roleArray = [{
+                roleId: this.id,
+                roleName: roleName
+            }];
+
+            // 调用函数打开模态框
+            showConfirmModal(roleArray);
+        });
+
+        // 10.给总的checkbox绑定单机响应函数
+        $("#summaryBox").click(function () {
+
+            // 获取当前多选框自身状态
+            var currentStatus = this.checked;
+
+            // 用当前多选框状态设置其它多选框
+            $(".itemBox").prop("checked", currentStatus);
+        });
+
+        // 11.全选全不选的反向操作
+        $("#rolePageBody").on("click", ".itemBox", function () {
+
+            // 获取当前已经选中的.itemBox的数量
+            var checkedBoxCount = $(".itemBox:checked").length;
+
+            // 获取全部.itemBox的数量
+            var totalBoxCount = $(".itemBox").length;
+
+            // 使用两者的比较结果设置总的checkBox
+            $("#summaryBox").prop("checked", checkedBoxCount === totalBoxCount)
+        });
+
+        // 12.给批量删除的按钮绑定单击响应函数
+        $("#batchRemoveBtn").click(function () {
+
+            // 创建数组对象用来存放后面获取到的角色对象
+            var roleArray = [];
+
+            // 遍历当前选中的多选框
+            $(".itemBox:checked").each(function () {
+
+                // 使用this引用当前遍历得到的多选框
+                var roleId = this.id;
+                console.log("roleId:" + roleId);
+
+                // 通过DOM操作获取角色名称
+                var roleName = $(this).parent().next().text();
+
+                roleArray.push({
+                    roleId: roleId,
+                    roleName: roleName
+                });
+            });
+
+            // 检查roleArray的长度是否为0
+            if (roleArray.length === 0) {
+                layer.msg("请至少选择一个执行删除");
+                return;
+            }
+
+            // 调用专门的函数打开确认模态框
+            showConfirmModal(roleArray);
+        });
     });
 </script>
 <body>
@@ -45,11 +239,12 @@
                                 class="glyphicon glyphicon-search"></i> 查询
                         </button>
                     </form>
-                    <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i
-                            class=" glyphicon glyphicon-remove"></i> 删除
+                    <button type="button" id="batchRemoveBtn" class="btn btn-danger"
+                            style="float:right;margin-left:10px;"><i
+                            class=" glyphicon glyphicon-remove"></i> 批量删除
                     </button>
-                    <button type="button" class="btn btn-primary" style="float:right;"
-                            onclick="window.location.href='form.html'"><i class="glyphicon glyphicon-plus"></i> 新增
+                    <button type="button" id="showAddModalBtn" class="btn btn-primary" style="float:right;"><i
+                            class="glyphicon glyphicon-plus"></i> 新增
                     </button>
                     <br>
                     <hr style="clear:both;">
@@ -78,23 +273,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">Modal title</h4>
-            </div>
-            <div class="modal-body">
-                <p>One fine body&hellip;</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+<%@include file="/WEB-INF/modal-role-add.jsp" %>
+<%@include file="/WEB-INF/modal-role-edit.jsp" %>
+<%@include file="/WEB-INF/modal-role-confirm.jsp" %>
 </body>
 </html>
