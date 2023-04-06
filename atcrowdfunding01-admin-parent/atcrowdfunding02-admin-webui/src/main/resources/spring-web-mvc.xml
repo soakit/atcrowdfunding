@@ -27,6 +27,8 @@
 
     <mvc:view-controller path="/role/to/page.do" view-name="role-page"/>
 
+    <mvc:view-controller path="/menu/to/page.do" view-name="menu-page"/>
+
 
     <!--注册拦截器-->
     <mvc:interceptors>
