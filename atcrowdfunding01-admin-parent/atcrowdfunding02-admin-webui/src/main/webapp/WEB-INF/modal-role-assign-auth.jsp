@@ -13,7 +13,7 @@
                 <ul id="authTreeDemo" class="ztree"></ul>
             </div>
             <div class="modal-footer">
-                <button id="assignBtn" type="button" class="btn btn-primary">好的，我设置好了！执行分配！</button>
+                <button id="assignBtn" type="button" class="btn btn-primary">分配权限</button>
             </div>
         </div>
     </div>
