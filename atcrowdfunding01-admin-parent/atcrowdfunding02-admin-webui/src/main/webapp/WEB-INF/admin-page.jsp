@@ -95,8 +95,8 @@
                                         <td>${admin.userName}</td>
                                         <td>${admin.email}</td>
                                         <td>
-                                            <!--<a href="admin/to/add.do" class="btn btn-success btn-xs"><i
-                                                    class=" glyphicon glyphicon-check"></i></a>-->
+                                            <a href="assign/to/assign/role/page.do?adminId=${admin.id }&pageNum=${requestScope.pageInfo.pageNum}&keyword=${param.keyword}"
+                                               class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></a>
 
                                             <a href="admin/to/edit.do?adminId=${admin.id }&pageNum=${requestScope.pageInfo.pageNum}&keyword=${param.keyword}"
                                                class="btn btn-primary btn-xs"><i
