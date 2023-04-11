@@ -28,11 +28,13 @@
 </nav>
 
 <div class="container">
-    <form action="admin/do/login.do" method="post" class="form-signin" role="form">
+    <form action="security/do/login.do" method="post" class="form-signin" role="form">
         <h2 class="form-signin-heading"><i class="glyphicon glyphicon-log-in"></i>管理员登录</h2>
         <p>${requestScope.exception.message}</p>
+        <p>${SPRING_SECURITY_LAST_EXCEPTION.message }</p>
         <div class="form-group has-success has-feedback">
-            <input type="text" class="form-control" id="inputSuccess4" name="loginAcct" placeholder="请输入登录账号" autofocus>
+            <input type="text" class="form-control" id="inputSuccess4" name="loginAcct" placeholder="请输入登录账号"
+                   autofocus>
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-success has-feedback">

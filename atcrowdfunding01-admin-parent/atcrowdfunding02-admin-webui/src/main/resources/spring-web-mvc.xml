@@ -31,23 +31,24 @@
 
 
     <!--注册拦截器-->
+    <!--使用SpringSecurity后，当前自定义的登录拦截器不再使用
     <mvc:interceptors>
         <mvc:interceptor>
-            <!--要拦截的路径-->
+            &lt;!&ndash;要拦截的路径&ndash;&gt;
             <mvc:mapping path="/**"/>
-            <!--不拦截的资源-->
+            &lt;!&ndash;不拦截的资源&ndash;&gt;
             <mvc:exclude-mapping path="/admin/to/login.do"/>
             <mvc:exclude-mapping path="/admin/do/login.do"/>
             <mvc:exclude-mapping path="/admin/do/logout.do"/>
-            <!--不拦截静态资源-->
+            &lt;!&ndash;不拦截静态资源&ndash;&gt;
             <mvc:exclude-mapping path="/js/**"/>
             <mvc:exclude-mapping path="/jquery/**"/>
             <mvc:exclude-mapping path="/bootstrap/**"/>
             <mvc:exclude-mapping path="/css/**"/>
-            <!--配置拦截器类-->
+            &lt;!&ndash;配置拦截器类&ndash;&gt;
             <bean class="com.atguigu.crowd.mvc.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
-    </mvc:interceptors>
+    </mvc:interceptors>-->
 
     <!--配置基于xml的异常映射-->
     <bean id="simpleMappingExceptionResolver"
