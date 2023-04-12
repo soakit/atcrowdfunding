@@ -214,4 +214,11 @@
         <foreach collection="authIdList" item="authId" separator=",">(#{roleId}, #{authId})</foreach>
     </insert>
 
+    <select id="selectAssignedAuthNameByAdminId" resultType="string">
+        select distinct t_auth.name
+        from t_auth
+                 left join inner_role_auth on t_auth.id=inner_role_auth.auth_id
+                 left join inner_admin_role iar on inner_role_auth.role_id = iar.role_id
+        where iar.admin_id=#{adminId} AND t_auth.name != "" AND t_auth.name IS NOT NULL;
+    </select>
 </mapper>

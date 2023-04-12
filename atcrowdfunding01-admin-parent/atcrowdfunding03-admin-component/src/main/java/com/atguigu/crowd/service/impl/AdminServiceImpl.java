@@ -6,6 +6,7 @@ import com.atguigu.crowd.entity.AdminExample;
 import com.atguigu.crowd.exception.LoginAcctAlreadyInUseException;
 import com.atguigu.crowd.exception.LoginAcctAlreadyInUseForUpdateException;
 import com.atguigu.crowd.mapper.AdminMapper;
+import com.atguigu.crowd.mvc.config.MyPasswordEncoder;
 import com.atguigu.crowd.service.api.AdminService;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.exception.LoginFailedException;
@@ -28,12 +29,16 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
+    @Autowired
+    private MyPasswordEncoder passwordEncoder;
+
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
 
     @Override
     public void saveAdmin(Admin admin) {
         // 密码加密
-        admin.setUserPswd(CrowdUtil.md5(admin.getUserPswd()));
+        String userPswd = admin.getUserPswd();
+        admin.setUserPswd(passwordEncoder.encode(userPswd));
         // 创建时间
         admin.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         // 用户名已存在错误：
@@ -142,5 +147,18 @@ public class AdminServiceImpl implements AdminService {
         if (roleIdList != null && roleIdList.size() > 0) {
             adminMapper.insertNewRelationship(adminId, roleIdList);
         }
+    }
+
+    @Override
+    public Admin getAdminByLoginAcct(String username) {
+
+        AdminExample example = new AdminExample();
+
+        AdminExample.Criteria criteria = example.createCriteria();
+
+        criteria.andLoginEqualTo(username);
+
+        return adminMapper.selectByExample(example).get(0);
+
     }
 }

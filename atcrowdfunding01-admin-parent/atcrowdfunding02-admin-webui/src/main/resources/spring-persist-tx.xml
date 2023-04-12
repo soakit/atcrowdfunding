@@ -17,6 +17,9 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <!-- 配置 MyPasswordEncoder -->
+    <bean id="passwordEncoder" class="com.atguigu.crowd.mvc.config.MyPasswordEncoder"/>
+
     <!--3. 配置AOP-->
     <aop:config>
         <!--考虑到后面整合SpringSecurity，避免把UserDetailService加入事务控制。让切入点表达式定位到ServiceImpl而不是Service-->

@@ -1,6 +1,7 @@
 package com.atguigu.crowd.mvc.config;
 
 import com.atguigu.crowd.constant.CrowdConstant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,11 +9,19 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @Configuration // 当前类为配置类
 @EnableWebSecurity  // 启用web环境下权限控制功能
 public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private MyPasswordEncoder passwordEncoder;
+
 
     @Bean
     @Override
@@ -20,16 +29,12 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
         // 与 SpringSecurity 环境下用户登录相关
         builder
-                .inMemoryAuthentication()
-                .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .withUser("admin")
-                .password("123456") // 使用明文密码
-                .roles("ADMIN")
-        ;
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder); // md5比较
+        // .passwordEncoder(NoOpPasswordEncoder.getInstance()); // 登录时明文比较
     }
 
     @Override
