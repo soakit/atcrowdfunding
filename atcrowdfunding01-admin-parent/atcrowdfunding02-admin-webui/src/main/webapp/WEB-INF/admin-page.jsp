@@ -63,9 +63,12 @@
                     <!--<button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i
                             class=" glyphicon glyphicon-remove"></i>批量删除
                     </button>-->
-                    <button type="button" class="btn btn-primary" style="float:right;"
-                            onclick="window.location.href='admin/to/add.do'"><i class="glyphicon glyphicon-plus"></i> 新增
-                    </button>
+                    <security:authorize access="hasRole('经理') OR hasAuthority('user:save')">
+                        <button type="button" class="btn btn-primary" style="float:right;"
+                                onclick="window.location.href='admin/to/add.do'"><i
+                                class="glyphicon glyphicon-plus"></i> 新增
+                        </button>
+                    </security:authorize>
                     <br>
                     <hr style="clear:both;">
                     <div class="table-responsive">
@@ -95,16 +98,20 @@
                                         <td>${admin.userName}</td>
                                         <td>${admin.email}</td>
                                         <td>
+                                            <%-- TODO: 分配角色权限控制 --%>
                                             <a href="assign/to/assign/role/page.do?adminId=${admin.id }&pageNum=${requestScope.pageInfo.pageNum}&keyword=${param.keyword}"
                                                class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></a>
 
-                                            <a href="admin/to/edit.do?adminId=${admin.id }&pageNum=${requestScope.pageInfo.pageNum}&keyword=${param.keyword}"
-                                               class="btn btn-primary btn-xs"><i
-                                                    class=" glyphicon glyphicon-pencil"></i></a>
+                                            <security:authorize access="hasRole('经理') OR hasAuthority('user:save')">
+                                                <a href="admin/to/edit.do?adminId=${admin.id }&pageNum=${requestScope.pageInfo.pageNum}&keyword=${param.keyword}"
+                                                   class="btn btn-primary btn-xs"><i
+                                                        class=" glyphicon glyphicon-pencil"></i></a>
 
-                                            <a href="admin/remove/${admin.id}/${requestScope.pageInfo.pageNum}/${param.keyword}.do"
-                                               class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove"></i>
-                                            </a>
+                                                <a href="admin/remove/${admin.id}/${requestScope.pageInfo.pageNum}/${param.keyword}.do"
+                                                   class="btn btn-danger btn-xs"><i
+                                                        class="glyphicon glyphicon-remove"></i>
+                                                </a>
+                                            </security:authorize>
                                         </td>
                                     </tr>
                                 </c:forEach>

@@ -6,21 +6,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration // 当前类为配置类
 @EnableWebSecurity  // 启用web环境下权限控制功能
+@EnableGlobalMethodSecurity(prePostEnabled = true) // 启用全局方法权限控制功能， 并且设置 prePostEnabled = true。 保证@PreAuthority、@PostAuthority、 @PreFilter、 @PostFilter 生效
 public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private MyPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
 
     @Bean
@@ -33,7 +35,7 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
         // 与 SpringSecurity 环境下用户登录相关
         builder
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder); // md5比较
+                .passwordEncoder(passwordEncoder);
         // .passwordEncoder(NoOpPasswordEncoder.getInstance()); // 登录时明文比较
     }
 
@@ -62,8 +64,12 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/ztree/**")
                 .permitAll()
-                .anyRequest()
+
+                .antMatchers("/admin/get/page.do")
+                .access("hasRole('组长') OR hasAuthority('user:get')")
+                .anyRequest()                                   // 其它任意请求
                 .authenticated()
+
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler((request, response, e) -> {

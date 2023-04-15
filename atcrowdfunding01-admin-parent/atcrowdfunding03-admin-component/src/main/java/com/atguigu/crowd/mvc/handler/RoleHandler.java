@@ -5,32 +5,30 @@ import com.atguigu.crowd.service.api.RoleService;
 import com.atguigu.crowd.util.ResultEntity;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class RoleHandler {
 
     @Autowired
     private RoleService roleService;
 
     // 返回json
-    @ResponseBody
+    @PreAuthorize("hasRole('部门助理') OR hasAuthority('role:get')")
     @RequestMapping("/role/get/page/info.do")
     public ResultEntity<PageInfo<Role>> getPageInfo(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                    @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                    @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
                                                     @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         // 调用service获取分页数据
         PageInfo<Role> pageInfo = roleService.getPageInfo(pageNum, pageSize, keyword);
         return ResultEntity.successWithData(pageInfo);
     }
 
-    @ResponseBody
+    @PreAuthorize("hasRole('部门负责人') OR hasAuthority('role:save')")
     @RequestMapping("/role/save.do")
     public ResultEntity<String> saveRole(@RequestParam("roleName") String roleName) {
 
@@ -39,7 +37,7 @@ public class RoleHandler {
         return ResultEntity.successWithoutData();
     }
 
-    @ResponseBody
+    @PreAuthorize("hasRole('部门负责人') OR hasAuthority('role:save')")
     @RequestMapping("/role/update.do")
     public ResultEntity<String> updateRole(Role role) {
 
@@ -47,7 +45,7 @@ public class RoleHandler {
         return ResultEntity.successWithoutData();
     }
 
-    @ResponseBody
+    @PreAuthorize("hasRole('部门负责人') OR hasAuthority('role:delete')")
     @RequestMapping("/role/remove/by/role/id/array.do")
     public ResultEntity<String> removeByRoleIdArray(@RequestBody List<Integer> roleIdList) {
 

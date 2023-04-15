@@ -5,6 +5,7 @@ import com.atguigu.crowd.entity.Admin;
 import com.atguigu.crowd.service.api.AdminService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,12 +43,13 @@ public class AdminHanlder {
         return "redirect:/admin/to/login.do";
     }
 
+    @PreAuthorize("hasRole('组长') OR hasAuthority('user:get')")
     @RequestMapping(value = "/admin/get/page.do")
     public String getPageInfo(
             // 使用defaultValue指定默认值
             @RequestParam(value = "keyword",defaultValue = "") String keyword,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             ModelMap modelMap
     ) {
         // 调用service方法获取PageInfo对象
@@ -58,6 +60,7 @@ public class AdminHanlder {
     }
 
     // 删除成员
+    @PreAuthorize("hasRole('经理') OR hasAuthority('user:delete')")
     @RequestMapping("/admin/remove/{adminId}/{pageNum}/{keyword}.do")
     public String remove(@PathVariable("adminId") Integer adminId,
                          @PathVariable("pageNum") Integer pageNum,
@@ -69,6 +72,7 @@ public class AdminHanlder {
     }
 
     // 新增成员
+    @PreAuthorize("hasRole('经理') OR hasAuthority('user:save')")
     @RequestMapping("/admin/save.do")
     public String save(Admin admin) {
         adminService.saveAdmin(admin);
@@ -76,6 +80,7 @@ public class AdminHanlder {
     }
 
     // 修改页面
+    @PreAuthorize("hasRole('经理') OR hasAuthority('user:save')")
     @RequestMapping("/admin/to/edit.do")
     public String toEdit(@RequestParam("adminId") Integer adminId,
                          ModelMap modelMap) {
@@ -85,6 +90,7 @@ public class AdminHanlder {
     }
 
     // 提交更新信息
+    @PreAuthorize("hasRole('经理') OR hasAuthority('user:save')")
     @RequestMapping(value = "/admin/update.do")
     public String update(Admin admin,
                          @RequestParam(value = "keyword",defaultValue = "") String keyword,

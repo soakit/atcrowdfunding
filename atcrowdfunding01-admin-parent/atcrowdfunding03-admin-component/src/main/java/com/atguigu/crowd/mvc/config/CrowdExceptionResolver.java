@@ -33,8 +33,8 @@ public class CrowdExceptionResolver {
     }
 
     // 未登录异常
-    @ExceptionHandler(value = AccessForbiddenException.class)
-    public ModelAndView resolveAccessForbiddenException(AccessForbiddenException exception,
+    @ExceptionHandler(value = Exception.class)
+    public ModelAndView resolveAccessForbiddenException(Exception exception,
                                                         HttpServletRequest request,
                                                         HttpServletResponse response) throws IOException {
         String viewName = "admin-login";
